@@ -19,3 +19,4 @@ and Jenkins for CI/CD automation.
 ```bash
 mvn clean package
 java -jar target/studentapp-0.0.1-SNAPSHOT.jar
+"# STUDENT-MANAGEMENT-DEV" 
