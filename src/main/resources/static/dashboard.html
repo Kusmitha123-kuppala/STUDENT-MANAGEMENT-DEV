@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome This is Kusmitha 🎓 | Student Management System</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+body{
+min-height:100vh;
+background:
+radial-gradient(circle at top left, rgba(0,255,255,.1), transparent 40%),
+radial-gradient(circle at bottom right, rgba(0,128,255,.1), transparent 40%),
+linear-gradient(135deg,#0f172a,#020617);
+color:#fff;
+}
+
+.sidebar{
+width:240px;height:100vh;position:fixed;
+background:linear-gradient(180deg,#020617,#0f172a,#1e293b);
+padding-top:20px;
+overflow-y:auto;
+}
+.sidebar h2{text-align:center;color:#38bdf8;margin-bottom:20px}
+.sidebar a{display:block;padding:14px 22px;color:#e5e7eb;text-decoration:none}
+.sidebar a:hover{background:rgba(56,189,248,.15);color:#38bdf8}
+
+.main{margin-left:240px;padding:25px}
+
+.topbar{
+background:rgba(15,23,42,.9);
+padding:15px;border-radius:14px;
+display:flex;justify-content:space-between;align-items:center
+}
+
+.topbar input{
+padding:10px;border-radius:8px;border:none;
+background:#020617;color:#fff
+}
+
+.cards{
+display:flex;gap:20px;margin-top:20px
+}
+
+.card{
+flex:1;
+background:rgba(15,23,42,.95);
+padding:25px;border-radius:18px;
+text-align:center;
+box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+
+.card h2{font-size:32px;margin:0}
+.card p{margin-top:8px;color:#aaa}
+
+.row{
+display:flex;gap:20px;margin-top:25px
+}
+
+.section{
+flex:1;
+background:rgba(15,23,42,.95);
+padding:25px;border-radius:18px;
+box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+
+.section h3,h4{margin-bottom:15px}
+
+.notice{
+padding:10px 0;
+border-bottom:1px solid rgba(255,255,255,.1);
+margin-bottom:10px;
+}
+
+.expenses-table table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+.expenses-table th, .expenses-table td{
+padding:12px;
+border-bottom:1px solid rgba(255,255,255,.1);
+text-align:left;
+}
+
+.expenses-table th{color:#38bdf8}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+<h2>🎓 SMS</h2>
+<a href="dashboard.html"><i class="fa fa-home"></i> Dashboard</a>
+<a href="student.html"><i class="fa fa-users"></i> Students</a>
+<a href="course.html"><i class="fa fa-graduation-cap"></i> Courses</a>
+<a href="faculty.html"><i class="fa fa-chalkboard-teacher"></i> Faculty</a>
+<a href="department.html"><i class="fa fa-building"></i> Departments</a>
+<a href="library.html"><i class="fa fa-calendar"></i> Library</a>
+<a href="attendance.html"><i class="fa fa-calendar"></i> Attendance</a>
+<a href="results.html"><i class="fa fa-file-alt"></i> Results</a>
+<a href="login.html"><i class="fa fa-sign-out"></i> Logout</a>
+</div>
+
+<div class="main">
+<!-- TOP BAR -->
+<div class="topbar">
+<strong>Welcome, This is Kusmitha 🎓 | Student Management Dashboard</strong>
+<input type="text" placeholder="Search students, courses...">
+</div>
+
+<!-- DASHBOARD CARDS -->
+<div class="cards">
+<div class="card" style="background:#43a047;color:#fff;">
+<h2>92%</h2>
+<p>Attendance</p>
+</div>
+
+<div class="card" style="background:#fb8c00;color:#fff;">
+<h2>24</h2>
+<p>Completed Credits</p>
+</div>
+
+<div class="card" style="background:#8e24aa;color:#fff;">
+<h2>6</h2>
+<p>Active Courses</p>
+</div>
+</div>
+
+<!-- STUDENT INFO + NOTICE BOARD -->
+<div class="row">
+<div class="section" style="flex:1.3;">
+<h3>📘 Student Academic Info</h3>
+<p><strong>Name:</strong> Kusmitha Kuppala</p>
+<p><strong>Department:</strong> Computer Science</p>
+<p><strong>Semester:</strong> 5th Semester</p>
+<p><strong>Roll No:</strong> K23GS42</p>
+
+<hr>
+
+<h4>📚 Course Enrollments</h4>
+<ul>
+<li>DevOps</li>
+<li>Cloud Architecture and Implementation</li>
+<li>Cloud Microservices</li>
+<li>Verbal Ability</li>
+<li>Formal Languages and Automation Theory</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>📢 Notices</h3>
+
+<div class="notice">
+<strong>7 Jan 2026</strong><br>
+End-term exam timetable released..
+</div>
+
+<div class="notice">
+<strong>Dec 23–24, 2025</strong><br>
+BOT FORGE 2025 | AWS Cloud Club.<br>
+Build & Scale Discord Bots.<br>
+A 2-day hands-on workshop where you’ll build a production-ready Discord bot — from bot logic to backend APIs and databases.
+</div>
+
+<div class="notice">
+<strong>24 Dec 2025</strong><br>
+Etp Group discussion scheduled ...
+</div>
+</div>
+</div>
+
+<!-- FEES TABLE -->
+<div class="section expenses-table">
+<h3>💰 Fee & Expense Details</h3>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Type</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>12315122</td>
+<td>Tuition Fee</td>
+<td>₹45,000</td>
+<td>Paid</td>
+</tr>
+
+<tr>
+<td>12315122</td>
+<td>Hostel Fee</td>
+<td>₹28,000</td>
+<td>Pending</td>
+</tr>
+
+<tr>
+<td>12315122</td>
+<td>Exam Fee</td>
+<td>₹4,000</td>
+<td>Paid</td>
+</tr>
+</table>
+</div>
+
+</div>
+</body>
+</html>
+
+#java -jar target/studentapp-0.0.1-SNAPSHOT.jar
+#http://localhost:8080/login.html

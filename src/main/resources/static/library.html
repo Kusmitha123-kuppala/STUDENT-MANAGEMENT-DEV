@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Library | SMS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{
+min-height:100vh;
+background:
+radial-gradient(circle at top left, rgba(56,189,248,.15), transparent 40%),
+radial-gradient(circle at bottom right, rgba(99,102,241,.15), transparent 40%),
+linear-gradient(135deg,#020617,#0f172a,#020617);
+color:#fff;
+}
+.sidebar{
+width:240px;height:100vh;position:fixed;
+background:linear-gradient(180deg,#0d47a1,#1976d2);
+padding-top:20px;
+}
+.sidebar h2{text-align:center;color:#38bdf8;margin-bottom:25px}
+.sidebar a{
+display:block;padding:14px 22px;color:#fff;
+text-decoration:none;transition:.3s
+}
+.sidebar a:hover{background:rgba(255,255,255,.15);padding-left:30px}
+.sidebar i{margin-right:10px}
+
+.main{margin-left:240px;padding:25px}
+
+.topbar{
+background:rgba(15,23,42,.95);
+padding:18px 22px;border-radius:16px;
+display:flex;justify-content:space-between;align-items:center
+}
+.topbar input{
+padding:10px 14px;width:260px;
+border-radius:10px;border:none;
+background:#020617;color:#fff
+}
+
+.card{
+margin-top:25px;
+background:rgba(15,23,42,.95);
+padding:25px;border-radius:18px
+}
+
+button{
+background:#1976d2;color:#fff;border:none;
+padding:10px 20px;border-radius:10px;
+cursor:pointer
+}
+button:hover{background:#0d47a1}
+
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{
+padding:14px;
+border-bottom:1px solid rgba(255,255,255,.12)
+}
+th{color:#38bdf8;text-align:left}
+.action i{cursor:pointer;margin-right:15px;font-size:18px}
+.edit{color:#4caf50}
+.delete{color:#f44336}
+
+.modal{
+display:none;position:fixed;inset:0;
+background:rgba(0,0,0,.75);
+justify-content:center;align-items:center
+}
+.modal-content{
+background:#0f172a;padding:25px;width:380px;
+border-radius:16px
+}
+.modal-content input{
+width:100%;padding:10px;margin-bottom:12px;
+border-radius:10px;border:none;
+background:#020617;color:#fff
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h2>🎓 SMS</h2>
+<a href="dashboard.html"><i class="fa fa-home"></i> Dashboard</a>
+<a href="students.html"><i class="fa fa-users"></i> Students</a>
+<a href="course.html"><i class="fa fa-graduation-cap"></i> Courses</a>
+<a href="faculty.html"><i class="fa fa-chalkboard-teacher"></i> Faculty</a>
+<a href="department.html"><i class="fa fa-building"></i> Departments</a>
+<a href="#"><i class="fa fa-book"></i> Library</a>
+<a href="attendance.html"><i class="fa fa-calendar"></i> Attendance</a>
+<a href="results.html"><i class="fa fa-file-alt"></i> Results</a>
+<a href="login.html"><i class="fa fa-sign-out"></i> Logout</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="topbar">
+<strong>Library Management</strong>
+<input type="text" id="search" placeholder="Search book..." onkeyup="searchBook()">
+</div>
+
+<div class="card">
+<button onclick="openAdd()">+ Add Book</button>
+
+<table id="bookTable">
+<tr>
+<th>ID</th>
+<th>Book Name</th>
+<th>Author</th>
+<th>Category</th>
+<th>Available</th>
+<th>Action</th>
+</tr>
+</table>
+</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<h3 id="title">Add Book</h3>
+<input id="bname" placeholder="Book Name">
+<input id="author" placeholder="Author">
+<input id="category" placeholder="Category">
+<input id="available" placeholder="Available (Yes / No)">
+<button onclick="save()">Save</button>
+<button onclick="closeModal()" style="background:#555;margin-left:10px">Cancel</button>
+</div>
+</div>
+
+<script>
+let books=JSON.parse(localStorage.getItem("books"))||[];
+let editIndex=null;
+
+function render(){
+const t=document.getElementById("bookTable");
+t.innerHTML=`<tr>
+<th>ID</th><th>Book Name</th><th>Author</th><th>Category</th><th>Available</th><th>Action</th>
+</tr>`;
+books.forEach((b,i)=>{
+t.insertRow().innerHTML=`
+<td>${i+1}</td>
+<td>${b.name}</td>
+<td>${b.author}</td>
+<td>${b.category}</td>
+<td>${b.available}</td>
+<td class="action">
+<i class="fa fa-edit edit" onclick="edit(${i})"></i>
+<i class="fa fa-trash delete" onclick="del(${i})"></i>
+</td>`;
+});
+localStorage.setItem("books",JSON.stringify(books));
+}
+
+function openAdd(){
+editIndex=null;
+title.innerText="Add Book";
+bname.value="";author.value="";category.value="";available.value="";
+modal.style.display="flex";
+}
+
+function edit(i){
+editIndex=i;
+title.innerText="Edit Book";
+bname.value=books[i].name;
+author.value=books[i].author;
+category.value=books[i].category;
+available.value=books[i].available;
+modal.style.display="flex";
+}
+
+function save(){
+if(!bname.value||!author.value||!category.value||!available.value)
+return alert("All fields required");
+const b={
+name:bname.value,
+author:author.value,
+category:category.value,
+available:available.value
+};
+editIndex===null?books.push(b):books[editIndex]=b;
+closeModal();render();
+}
+
+function del(i){
+if(confirm("Delete this book?")){
+books.splice(i,1);render();
+}
+}
+
+function closeModal(){modal.style.display="none"}
+
+function searchBook(){
+const v=search.value.toLowerCase();
+document.querySelectorAll("#bookTable tr").forEach((r,i)=>{
+if(i===0)return;
+r.style.display=r.innerText.toLowerCase().includes(v)?"":"none";
+});
+}
+
+render();
+</script>
+
+</body>
+</html>

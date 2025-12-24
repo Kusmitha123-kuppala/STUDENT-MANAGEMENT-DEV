@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Students | Student Management System</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif
+}
+
+body{
+min-height:100vh;
+background:
+radial-gradient(circle at top left, rgba(0,255,255,.1), transparent 40%),
+radial-gradient(circle at bottom right, rgba(0,128,255,.1), transparent 40%),
+linear-gradient(135deg,#0f172a,#020617);
+color:#fff;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+width:240px;
+background:linear-gradient(180deg,#0d47a1,#1976d2);
+height:100vh;
+position:fixed;
+padding-top:20px;
+overflow-y:auto;
+}
+
+.sidebar h2{
+text-align:center;
+margin-bottom:25px;
+color:#38bdf8;
+}
+
+.sidebar a{
+display:block;
+padding:14px 22px;
+color:#fff;
+text-decoration:none;
+transition:.3s;
+}
+
+.sidebar a:hover,
+.sidebar a.active{
+background:rgba(255,255,255,0.15);
+padding-left:30px;
+}
+
+.sidebar a i{margin-right:10px}
+
+/* ===== MAIN ===== */
+.main{
+margin-left:240px;
+padding:25px;
+}
+
+/* ===== TOPBAR ===== */
+.topbar{
+background:rgba(15,23,42,.9);
+padding:15px 20px;
+border-radius:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.topbar input{
+padding:10px 14px;
+width:260px;
+border-radius:8px;
+border:none;
+background:#020617;
+color:#fff;
+}
+
+/* ===== SECTION ===== */
+.section{
+background:rgba(15,23,42,.95);
+padding:25px;
+border-radius:16px;
+box-shadow:0 12px 30px rgba(0,0,0,.2);
+margin-top:25px;
+}
+
+/* ===== BUTTON ===== */
+button{
+background:#1976d2;
+color:#fff;
+border:none;
+padding:10px 16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0d47a1;
+}
+
+/* ===== TABLE ===== */
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid rgba(255,255,255,.1);
+text-align:left;
+color:#fff;
+}
+
+th{color:#38bdf8}
+
+.action i{
+cursor:pointer;
+margin-right:10px;
+}
+
+.action .edit{color:#4caf50}
+.action .delete{color:#f44336}
+
+/* ===== MODAL ===== */
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.7);
+justify-content:center;
+align-items:center;
+z-index:100;
+}
+
+.modal-content{
+background:#0f172a;
+padding:25px;
+width:350px;
+border-radius:12px;
+color:#fff;
+}
+
+.modal-content h3{
+margin-bottom:15px;
+}
+
+.modal-content input{
+width:100%;
+padding:10px;
+margin-bottom:10px;
+border-radius:6px;
+border:none;
+background:#020617;
+color:#fff;
+}
+
+.modal-content button{
+margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h2>🎓 SMS</h2>
+<a href="dashboard.html"><i class="fa fa-home"></i> Dashboard</a>
+<a href="#" class="active"><i class="fa fa-users"></i> Students</a>
+<a href="course.html"><i class="fa fa-graduation-cap"></i> Courses</a>
+<a href="faculty.html"><i class="fa fa-chalkboard-teacher"></i> Faculty</a>
+<a href="department.html"><i class="fa fa-building"></i> Departments</a>
+<a href="library.html"><i class="fa fa-book"></i> Library</a>
+<a href="attendance.html"><i class="fa fa-calendar-check"></i> Attendance</a>
+<a href="results.html"><i class="fa fa-file-alt"></i> Results</a>
+<a href="login.html"><i class="fa fa-sign-out"></i> Logout</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+<strong>Student Management</strong>
+<input type="text" id="search" placeholder="Search students..." onkeyup="searchStudent()">
+</div>
+
+<div class="section">
+<button onclick="openAdd()">+ Add Student</button>
+
+<table id="studentTable">
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Course</th>
+<th>Action</th>
+</tr>
+</table>
+</div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<h3 id="modalTitle">Add Student</h3>
+<input type="text" id="name" placeholder="Student Name">
+<input type="email" id="email" placeholder="Student Email">
+<input type="text" id="course" placeholder="Course Name">
+<button onclick="saveStudent()">Save</button>
+<button onclick="closeModal()" style="background:#777;margin-left:10px">Cancel</button>
+</div>
+</div>
+
+<script>
+let students = JSON.parse(localStorage.getItem("students")) || [];
+let editIndex = null;
+
+function render(){
+const table = document.getElementById("studentTable");
+table.innerHTML = `
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Course</th>
+<th>Action</th>
+</tr>`;
+
+students.forEach((s,i)=>{
+table.insertRow().innerHTML = `
+<td>${i+1}</td>
+<td>${s.name}</td>
+<td>${s.email}</td>
+<td>${s.course}</td>
+<td class="action">
+<i class="fa fa-edit edit" onclick="editStudent(${i})"></i>
+<i class="fa fa-trash delete" onclick="deleteStudent(${i})"></i>
+</td>`;
+});
+
+localStorage.setItem("students", JSON.stringify(students));
+}
+
+function openAdd(){
+editIndex=null;
+modalTitle.innerText="Add Student";
+name.value="";
+email.value="";
+course.value="";
+modal.style.display="flex";
+}
+
+function saveStudent(){
+if(!name.value || !email.value || !course.value){
+alert("All fields are required");
+return;
+}
+
+const student={
+name:name.value,
+email:email.value,
+course:course.value
+};
+
+editIndex===null ? students.push(student) : students[editIndex]=student;
+closeModal();
+render();
+}
+
+function editStudent(i){
+editIndex=i;
+const s=students[i];
+name.value=s.name;
+email.value=s.email;
+course.value=s.course;
+modalTitle.innerText="Edit Student";
+modal.style.display="flex";
+}
+
+function deleteStudent(i){
+if(confirm("Delete this student?")){
+students.splice(i,1);
+render();
+}
+}
+
+function closeModal(){
+modal.style.display="none";
+}
+
+function searchStudent(){
+const value=document.getElementById("search").value.toLowerCase();
+document.querySelectorAll("#studentTable tr").forEach((row,i)=>{
+if(i===0)return;
+row.style.display=row.innerText.toLowerCase().includes(value)?"":"none";
+});
+}
+
+render();
+</script>
+
+</body>
+</html>

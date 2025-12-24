@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Departments | Student Management System</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+body{
+min-height:100vh;
+background:
+radial-gradient(circle at top left, rgba(0,255,255,.1), transparent 40%),
+radial-gradient(circle at bottom right, rgba(0,128,255,.1), transparent 40%),
+linear-gradient(135deg,#0f172a,#020617);
+color:#fff;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+width:240px;height:100vh;position:fixed;
+background:linear-gradient(180deg,#020617,#0f172a,#1e293b);
+padding-top:20px;
+}
+.sidebar h2{text-align:center;color:#38bdf8;margin-bottom:20px}
+.sidebar a{
+display:flex;align-items:center;gap:10px;
+padding:14px 22px;color:#e5e7eb;text-decoration:none
+}
+.sidebar a:hover,.sidebar a.active{
+background:rgba(56,189,248,.15);
+color:#38bdf8
+}
+
+/* ===== MAIN ===== */
+.main{margin-left:240px;padding:25px}
+
+/* ===== TOPBAR ===== */
+.topbar{
+background:rgba(15,23,42,.9);
+padding:15px 20px;border-radius:14px;
+display:flex;justify-content:space-between;align-items:center
+}
+.topbar input{
+padding:10px 14px;width:260px;border-radius:8px;border:none;
+background:#020617;color:#fff
+}
+
+/* ===== SECTION ===== */
+.section{
+background:rgba(15,23,42,.95);
+padding:25px;border-radius:18px;
+margin-top:25px;
+box-shadow:0 4px 10px rgba(0,0,0,.25)
+}
+
+/* ===== BUTTON ===== */
+button{
+background:linear-gradient(135deg,#0ea5e9,#38bdf8);
+border:none;padding:10px 18px;
+border-radius:10px;font-weight:600;cursor:pointer
+}
+
+/* ===== TABLE ===== */
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{
+padding:12px;border-bottom:1px solid rgba(255,255,255,.1);
+text-align:left
+}
+th{color:#38bdf8}
+.action i{cursor:pointer;margin-right:12px}
+.edit{color:#22c55e}
+.delete{color:#ef4444}
+
+/* ===== MODAL ===== */
+.modal{
+display:none;position:fixed;inset:0;
+background:rgba(2,6,23,.85);
+justify-content:center;align-items:center
+}
+.modal-content{
+background:#020617;padding:25px;
+width:360px;border-radius:16px
+}
+.modal-content input{
+width:100%;padding:10px;margin-bottom:10px;
+border:none;border-radius:8px;
+background:#0f172a;color:#fff
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h2>🎓 SMS</h2>
+<a href="dashboard.html"><i class="fa fa-home"></i> Dashboard</a>
+<a href="students.html"><i class="fa fa-users"></i> Students</a>
+<a href="courses.html"><i class="fa fa-graduation-cap"></i> Courses</a>
+<a href="faculty.html"><i class="fa fa-chalkboard-teacher"></i> Faculty</a>
+<a href="departments.html" class="active"><i class="fa fa-building"></i> Departments</a>
+<a href="library.html"><i class="fa fa-book"></i> Library</a>
+<a href="attendance.html"><i class="fa fa-calendar"></i> Attendance</a>
+<a href="results.html"><i class="fa fa-file-alt"></i> Results</a>
+<a href="login.html"><i class="fa fa-sign-out"></i> Logout</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+<strong>Department Management</strong>
+<input type="text" id="search" placeholder="Search department..." onkeyup="searchDept()">
+</div>
+
+<div class="section">
+<button onclick="openAdd()">+ Add Department</button>
+
+<table id="deptTable">
+<tr>
+<th>ID</th>
+<th>Department Name</th>
+<th>HOD</th>
+<th>Contact</th>
+<th>Action</th>
+</tr>
+</table>
+</div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<h3 id="modalTitle">Add Department</h3>
+<input id="deptName" placeholder="Department Name">
+<input id="hod" placeholder="HOD Name">
+<input id="contact" placeholder="Contact Email">
+<button onclick="saveDept()">Save</button>
+<button onclick="closeModal()" style="background:#334155;color:#fff;margin-left:10px">Cancel</button>
+</div>
+</div>
+
+<script>
+let departments = JSON.parse(localStorage.getItem("departments")) || [];
+let editIndex = null;
+
+function render(){
+const table = document.getElementById("deptTable");
+table.innerHTML = `
+<tr>
+<th>ID</th>
+<th>Department Name</th>
+<th>HOD</th>
+<th>Contact</th>
+<th>Action</th>
+</tr>`;
+
+departments.forEach((d,i)=>{
+table.insertRow().innerHTML = `
+<td>${i+1}</td>
+<td>${d.name}</td>
+<td>${d.hod}</td>
+<td>${d.contact}</td>
+<td class="action">
+<i class="fa fa-edit edit" onclick="editDept(${i})"></i>
+<i class="fa fa-trash delete" onclick="deleteDept(${i})"></i>
+</td>`;
+});
+
+localStorage.setItem("departments", JSON.stringify(departments));
+}
+
+function openAdd(){
+editIndex=null;
+modalTitle.innerText="Add Department";
+deptName.value="";
+hod.value="";
+contact.value="";
+modal.style.display="flex";
+}
+
+function saveDept(){
+if(!deptName.value || !hod.value || !contact.value){
+alert("All fields required");
+return;
+}
+
+const dept={
+name:deptName.value,
+hod:hod.value,
+contact:contact.value
+};
+
+editIndex===null ? departments.push(dept) : departments[editIndex]=dept;
+closeModal(); render();
+}
+
+function editDept(i){
+editIndex=i;
+const d=departments[i];
+deptName.value=d.name;
+hod.value=d.hod;
+contact.value=d.contact;
+modalTitle.innerText="Edit Department";
+modal.style.display="flex";
+}
+
+function deleteDept(i){
+if(confirm("Delete department?")){
+departments.splice(i,1);
+render();
+}
+}
+
+function closeModal(){modal.style.display="none";}
+
+function searchDept(){
+const val=search.value.toLowerCase();
+document.querySelectorAll("#deptTable tr").forEach((row,i)=>{
+if(i===0)return;
+row.style.display=row.innerText.toLowerCase().includes(val)?"":"none";
+});
+}
+
+render();
+</script>
+
+</body>
+</html>
