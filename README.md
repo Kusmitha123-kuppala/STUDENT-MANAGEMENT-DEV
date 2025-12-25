@@ -44,6 +44,7 @@ java -version
 mvn -version
 git --version
 docker --version
+
 🛠️ Installation & Setup
 Clone the Repository
 bash
@@ -58,21 +59,16 @@ Run Unit Tests
 bash
 Copy code
 mvn test
+
 🐳 Docker Implementation
 Build Docker Image
-bash
-Copy code
 docker build -t student-management-app .
 Run Docker Container
-bash
-Copy code
 docker run -p 8080:8080 student-management-app
-Access the Application
+
 Open your browser and navigate to:
 
-arduino
-Copy code
-http://localhost:8080
+http://localhost:8080/login.html
 🔄 Jenkins CI/CD Pipeline
 This project uses Jenkins for Continuous Integration and Deployment.
 
@@ -88,8 +84,6 @@ Application Deployment
 Every code commit to GitHub automatically triggers the Jenkins pipeline.
 
 📦 Project Structure
-bash
-Copy code
 student-management-system/
 ├── pom.xml                 # Maven configuration
 ├── Dockerfile              # Docker build file
@@ -101,42 +95,28 @@ student-management-system/
 │   └── test/
 │       └── java/           # JUnit test cases
 └── README.md
+
 🎯 Usage
 Adding a Student
 Enter student details (ID, Name, Department, etc.)
-
 Click Add Student
-
 Updating Student Details
 Select a student record
-
 Modify the required fields
-
 Click Update Student
-
 Deleting a Student
 Select a student record
-
 Click Delete Student
-
 Confirm deletion
-
 Viewing Students
 Displays a list of all student records
 
 🧪 Testing
 Run all test cases:
-
-bash
-Copy code
 mvn test
-Run tests with detailed logs:
 
-bash
-Copy code
-mvn test -X
 📝 Maven Commands
-Command	Description
+
 mvn clean	Remove target directory
 mvn compile	Compile source code
 mvn test	Run unit tests
@@ -146,28 +126,21 @@ mvn clean install	Full Maven lifecycle
 
 🔁 DevOps Workflow
 Developer pushes code to GitHub
-
 Jenkins automatically triggers the pipeline
-
 Maven builds and tests the application
-
 Docker creates the container image
-
 Application is deployed automatically
 
 📈 Future Enhancements
 Kubernetes deployment
-
 Cloud hosting (AWS / Azure)
-
 Database integration
-
 Role-based access control
 
 👤 Author
 Kusumitha Kuppala
 B.Tech – Computer Science Engineering
-Aspiring DevOps / SRE Engineer
+Aspiring DevOps .
 
 📄 License
 This project is open source and available for educational use.
