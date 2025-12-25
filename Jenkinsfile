@@ -32,7 +32,7 @@ pipeline {
                 bat '''
                 docker stop studentapp || exit 0
                 docker rm studentapp || exit 0
-                docker run -d --name studentapp -p 8080:8080 student-management-app
+                docker run -d --name studentapp -p 9090:8080 student-management-app
                 '''
             }
         }
