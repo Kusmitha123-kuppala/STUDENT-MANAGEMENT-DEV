@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     tools {
-       jdk 'jdk17'
-       maven 'maven3'
-
+        jdk 'jdk17'
+        maven 'maven3'
     }
 
     stages {
@@ -18,21 +17,21 @@ pipeline {
 
         stage('Maven Build & Test') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn clean package'
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t student-management-app .'
+                bat 'docker build -t student-management-app .'
             }
         }
 
         stage('Docker Run') {
             steps {
-                sh '''
-                docker stop studentapp || true
-                docker rm studentapp || true
+                bat '''
+                docker stop studentapp || exit 0
+                docker rm studentapp || exit 0
                 docker run -d --name studentapp -p 8080:8080 student-management-app
                 '''
             }
