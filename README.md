@@ -45,19 +45,16 @@ mvn -version
 git --version
 docker --version
 
+
 🛠️ Installation & Setup
 Clone the Repository
-bash
-Copy code
+
 git clone https://github.com/your-username/student-management-system.git
 cd student-management-system
+
 Build the Project
-bash
-Copy code
 mvn clean install
 Run Unit Tests
-bash
-Copy code
 mvn test
 
 🐳 Docker Implementation
